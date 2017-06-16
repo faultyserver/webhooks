@@ -1,0 +1,9 @@
+name: shards
+version: 0.1.0
+license: MIT
+author:
+  - Jon Egeland <jonegeland@gmail.com>
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal

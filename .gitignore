@@ -1,6 +1,11 @@
+# Dependencies
 /doc/
 /lib/
 /bin/
 /.shards/
 
+# Private configuration
 env.yaml
+
+# Artifacts
+webhooks

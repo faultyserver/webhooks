@@ -1,18 +1,7 @@
-require "http"
-require "json"
-require "yaml"
-
-# See `./env.example.yaml` for what goes in this file.
-config = YAML.parse(File.open("./env.yaml"))
-
-
-server = HTTP::Server.new(2017) do |context|
-  # The webhook provider shouldn't care what we do with the request
-  context.response.content_type = "text/plain"
-  context.response.status_code = 204
-
-  if body = context.request.body
-    params = HTTP::Params.parse(body.gets_to_end)
+module Handlers
+  def_handler HerokuDiscord do
+    # See `./env.example.yaml` for what goes in this file.
+    config = YAML.parse(File.open("./env.yaml"))
 
     # See https://discordapp.com/developers/docs/resources/webhook#execute-webhook
     # for a reference of Discord's webhook payload format.
@@ -20,9 +9,7 @@ server = HTTP::Server.new(2017) do |context|
       params["git_log"] = "commit message not provided."
     end
 
-    if params["prev_head"]
-      params["prev_head"] = params["prev_head"][0, 8]
-    end
+    params["prev_head"] = params["prev_head"]? ? params["prev_head"][0, 8] : "not specified"
 
     discord_payload = {
       "embeds" => [{
@@ -41,7 +28,7 @@ server = HTTP::Server.new(2017) do |context|
           },
           {
             "name" => "new head",
-            "value" => params["head"],
+            "value" => params["head"][0, 8],
             "inline" => true
           },
           {
@@ -58,5 +45,3 @@ server = HTTP::Server.new(2017) do |context|
     HTTP::Client.post(config["discord_target"].to_s, headers: HTTP::Headers{"Content-Type" => "application/json"}, body: discord_payload)
   end
 end
-
-server.listen
