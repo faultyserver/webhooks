@@ -25,22 +25,23 @@ module Handlers
 #     },
 #     "airbrake_error_url": "https://airbrake.io/airbrake-error-url"
 # }
+    body = JSON.parse(env.request.body.as(IO).gets_to_end)
 
     discord_payload = {
       "embeds" => [{
-        "title" => params["error"]["error_class"],
-        "url" => params["airbrake_error_url"],
-        "description" => params["error"]["error_message"],
+        "title" => body["error"]["error_class"],
+        "url" => body["airbrake_error_url"],
+        "description" => body["error"]["error_message"],
         "color" => 0x79589f,
         "author" => {
-          "name" => "#{params["error"]["file"]}:#{params["error"]["line_number"]}"
+          "name" => "#{body["error"]["file"]}:#{body["error"]["line_number"]}"
         },
         "fields" => [
-            {"name" => "Environment", "value" => params["error"]["environment"], "inline" => true},
-            {"name" => "Severity", "value" => params["error"]["severity"], "inline" => true},
-            {"name" => "Occurrances", "value" => params["error"]["times_occurred"], "inline" => true}
+            {"name" => "Environment", "value" => body["error"]["environment"], "inline" => true},
+            {"name" => "Severity", "value" => body["error"]["severity"], "inline" => true},
+            {"name" => "Occurrances", "value" => body["error"]["times_occurred"], "inline" => true}
         ],
-        "timestamp" => params["error"]["last_occurred_at"]
+        "timestamp" => body["error"]["last_occurred_at"]
       }]
     }.to_json
 

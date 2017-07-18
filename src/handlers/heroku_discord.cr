@@ -2,11 +2,13 @@ module Handlers
   def_handler HerokuDiscord do
     # See https://discordapp.com/developers/docs/resources/webhook#execute-webhook
     # for a reference of Discord's webhook payload format.
-    # unless params["git_log"]
-    #   params["git_log"] = "commit message not provided."
-    # end
+    params = env.params.body
+    
+    unless params["git_log"]
+       params["git_log"] = "commit message not provided."
+     end
 
-    # params["prev_head"] = params["prev_head"]? ? params["prev_head"][0, 8] : "not specified"
+    params["prev_head"] = params["prev_head"]? ? params["prev_head"][0, 8] : "not specified"
 
     discord_payload = {
       "embeds" => [{
@@ -25,7 +27,7 @@ module Handlers
           },
           {
             "name" => "new head",
-            "value" => params["head"].as_s[0, 8],
+            "value" => params["head"][0, 8],
             "inline" => true
           },
           {

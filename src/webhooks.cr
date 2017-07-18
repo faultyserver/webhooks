@@ -28,9 +28,8 @@ post "/execute/:hook_id" do |env|
   hook_id = env.params.url["hook_id"]
   hook_type = ENV["#{hook_id}_type"]
   hook_target = ENV["#{hook_id}_target"]
-  body = JSON.parse(env.request.body.as(IO).gets_to_end)
 
-  Handlers::TYPES[hook_type].handle(body, hook_target)
+  Handlers::TYPES[hook_type].handle(env, hook_target)
 end
 
 Kemal.run
