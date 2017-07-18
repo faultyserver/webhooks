@@ -1,15 +1,12 @@
 module Handlers
   def_handler HerokuDiscord do
-    # See `./env.example.yaml` for what goes in this file.
-    config = YAML.parse(File.open("./env.yaml"))
-
     # See https://discordapp.com/developers/docs/resources/webhook#execute-webhook
     # for a reference of Discord's webhook payload format.
-    unless params["git_log"] && !params["git_log"].empty?
-      params["git_log"] = "commit message not provided."
-    end
+    # unless params["git_log"]
+    #   params["git_log"] = "commit message not provided."
+    # end
 
-    params["prev_head"] = params["prev_head"]? ? params["prev_head"][0, 8] : "not specified"
+    # params["prev_head"] = params["prev_head"]? ? params["prev_head"][0, 8] : "not specified"
 
     discord_payload = {
       "embeds" => [{
@@ -28,7 +25,7 @@ module Handlers
           },
           {
             "name" => "new head",
-            "value" => params["head"][0, 8],
+            "value" => params["head"].as_s[0, 8],
             "inline" => true
           },
           {
@@ -42,6 +39,6 @@ module Handlers
     }.to_json
 
     # Send the formatted webhook payload to Discord.
-    HTTP::Client.post(config["discord_target"].to_s, headers: HTTP::Headers{"Content-Type" => "application/json"}, body: discord_payload)
+    HTTP::Client.post(target.to_s, headers: HTTP::Headers{"Content-Type" => "application/json"}, body: discord_payload)
   end
 end
