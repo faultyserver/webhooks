@@ -7,6 +7,9 @@ require "./handler"
 
 
 REGISTERED_HOOKS = {} of String => Handlers::Handler
+get "/" do |env|
+  "<html><body><p>Discord Webhook Proxy Server</p></body></html>"
+end
 
 post "/create_hook/:type" do |env|
   hook_id = SecureRandom.hex(8)
