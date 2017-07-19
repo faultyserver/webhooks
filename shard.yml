@@ -1,8 +1,12 @@
-name: shards
+name: webhooks
 version: 0.1.0
 license: MIT
 author:
   - Jon Egeland <jonegeland@gmail.com>
+
+targets:
+  webhooks:
+    main: src/webhooks.cr
 
 dependencies:
   kemal:
