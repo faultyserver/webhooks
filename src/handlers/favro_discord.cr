@@ -37,7 +37,7 @@ module Handlers
 
     if body["comment"]?
       fields = [{"name" => "#{body["action"]} Comment", "value" => "#{body["comment"]["comment"]}", "inline" => true}]
-    elsif body["card"]["detailedDescription"]?
+    elsif body["card"]? && body["card"]["detailedDescription"]?
         description = body["card"]["detailedDescription"]
     end
 
