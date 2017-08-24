@@ -41,6 +41,7 @@ module Handlers
         description = body["card"]["detailedDescription"]
     end
 
+    if body["card"]? && body["sender"]?
     discord_payload = {
      "embeds" => [{
        "title" => body["card"]["name"],
@@ -54,6 +55,9 @@ module Handlers
        "timestamp" => Time.now
      }]
     }
+  else
+    discord_payload = {"content" => body.to_s}
+  end
 
 
     # Send the formatted webhook payload to Discord.
