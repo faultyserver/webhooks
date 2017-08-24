@@ -9,14 +9,30 @@ This proxy is written in [Crystal](http://crystal-lang.org), which you can insta
 
 To run the proxy locally, but test with real-world webhooks, I recommend using [`ngrok`](https://ngrok.com/download). To use it, simply download the executable and put it somewhere in your `$PATH`.
 
+## Compiling
+
+You need to install the dependencies with `shards`:
+
+```
+$ shards install
+```
+
+and then compile:
+
+```
+$ shards build
+```
 
 ## Usage
 
-First, set up `env.yaml` with the appropriate endpoint definitions. Currently, only Discord is supported as an endpoint. See `env.example.yaml` for a reference of what this file should look like. In short, it looks like this:
+First, set up your local environment with the appropriate endpoint definitions. You need an environment variable for the class name that implements the specific proxy type and another variable for the endpoint to proxy to:
 
-```yaml
-discord_target: https://discordapp.com/api/webhooks/#{webhook.id}/#{webhook.token}
+```bash
+export airbrake_type=AirbrakeDiscord
+export airbrake_target=https//discordapp.com/ai/webhooks/blahblahblah
 ```
+
+This will setup a proxy at url http://localhost/webhooks/airbrake that uses the `AirbrakeDiscord` handler and posts to the specified discord channel url.
 
 With the configuration in place, just run the server with
 
