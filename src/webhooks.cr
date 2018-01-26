@@ -1,5 +1,6 @@
 require "json"
 require "yaml"
+require "random/secure"
 
 require "kemal"
 
@@ -12,9 +13,9 @@ get "/" do |env|
 end
 
 post "/create_hook/:type" do |env|
-  hook_id = SecureRandom.hex(8)
+  hook_id = Random::Secure.hex(8)
   while REGISTERED_HOOKS[hook_id]?
-    hook_id = SecureRandom.hex(8)
+    hook_id = Random::Secure.hex(8)
   end
 
   REGISTERED_HOOKS[hook_id] = Handlers::TYPES[env.params.url["type"]].dup
